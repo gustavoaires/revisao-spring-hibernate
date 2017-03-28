@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+	<head>
+		<link href="/webjars/materializecss/0.97.7/css/materialize.css" 
+			type="text/css" 
+			rel="stylesheet" 
+			media="screen,projection"/>
+			
+		<title>FutManager</title>
+	</head>
+	
+	<body>
+		<div class="container">
+			<div class="row valign-wrapper">
+				<div class="col s5">
+					<h3>Detalhes do <span th:text="${time.nome}"></span></h3>
+				</div>
+				<div class="col s7">
+					<div class="col s6">
+						<a href="/times/" class="valign btn-large wave-effect wave-light teal right">Gerenciar Times</a>
+					</div>
+					<div class="col s6">
+						<a href="/jogadores/" class="valign btn-large wave-effect wave-light teal right">Gerenciar Jogador</a>
+					</div>
+				</div>
+			</div>
+			
+			<div th:if="${erro}" class="row">
+			  <div class="chip red white-text">
+			    <span th:text="${erro}"></span>
+			  </div>
+			</div>
+			
+			<div class="row">
+				<form th:action="@{'/times/'+${time.id}+'/adicionarjogador'}" method="POST">
+					<div class="col s8">
+						<label>Escolha um jogador sem time</label>
+						<select class="browser-default" name="jogadorSemTimeID">
+							<option value="" disabled="disabled" selected="selected"> Escolha um jogador</option>
+							<option th:each="jogador : ${jogadoresSemTime}" 
+								th:value="${jogador.id}"
+								th:text="${jogador.nome}"></option>
+						</select>
+					</div>
+					<div class="col s4">
+						<button type="submit" class="btn waves-effect waves-light" name="action">Adicionar jogador ao time</button>
+					</div>
+				</form>
+			</div>
+			
+			<div class="row">
+				<table class="striped">
+					<thead>
+						<tr>
+							<th>Nome</th>
+							<th>Idade</th>
+							<th>Excluir do time</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="jogadorNoTime : ${time.jogadores}">
+							<td th:text="${jogadorNoTime.nome}"></td>
+							<td th:text="${jogadorNoTime.idade}"></td>
+							<td><a th:href="@{${'/times/'+time.id+'/removerjogador/'+jogadorNoTime.id}}" class="waves-effect waves-teal btn-flat">X</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<script src="/webjars/jquery/2.2.4/jquery.js"></script>
+		<script src="/webjars/materializecss/0.97.7/js/materialize.js"></script>
+	</body>
+
+</html>
